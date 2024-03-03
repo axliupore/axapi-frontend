@@ -1,24 +1,9 @@
 # axapi-frontend
 
-## Project setup
-```
-npm install
-```
+## 项目介绍
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+本项目是 axapi 项目的前端部分，使用 Vue3 + Typescript + Ant Design Vue 进行项目开发
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 参考项目
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 本项目前端主要是参考这位大佬进行开发的：[项目地址](https://github.com/qimu666/qi-api-frontend)
