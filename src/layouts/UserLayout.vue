@@ -3,10 +3,12 @@
     <div class="container">
       <div class="user-layout-content">
         <div class="top">
-          <div class="header">
-            <img src="~@/assets/logo.svg" alt="logo" />
-            <span class="title"> Ax-API 接口开放平台 </span>
-          </div>
+          <router-link to="/" style="text-decoration: none">
+            <div class="header">
+              <img src="~@/assets/logo.svg" alt="logo" />
+              <span class="title"> Ax-API 接口开放平台 </span>
+            </div>
+          </router-link>
           <div class="desc">
             Ax-API 接口开放平台致力于提供稳定、安全、高效的接口调用服务
           </div>

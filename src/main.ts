@@ -4,15 +4,12 @@ import router from "./router";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 import { createPinia } from "pinia";
-import { ConfigProvider } from "ant-design-vue";
 
 const pinia = createPinia();
-
 const app = createApp(App);
 
 app.use(router);
 app.use(Antd);
 app.use(pinia);
-app.use(ConfigProvider);
 
 app.mount("#app");

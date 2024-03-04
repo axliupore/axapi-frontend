@@ -34,7 +34,7 @@
             </a-form-item>
             <div style="margin-bottom: 24px">
               <a-checkbox v-model:checked="checked">自动登录</a-checkbox>
-              <router-link style="float: right" to="">
+              <router-link style="float: right" to="/user/register">
                 还没账号?点击前往注册
               </router-link>
             </div>
@@ -43,7 +43,8 @@
                 class="login-button"
                 size="large"
                 type="primary"
-                @click="submit"
+                @click="loginAccount"
+                html-type="submit"
                 >登录
               </a-button>
             </a-form-item>
@@ -72,7 +73,7 @@
               </a-input>
             </a-form-item>
             <a-form-item
-              name="email"
+              name="code"
               :rules="[{ required: true, message: '请输入验证码' }]"
             >
               <div style="display: flex">
@@ -86,17 +87,24 @@
                     <LockOutlined />
                   </template>
                 </a-input>
-                <a-button size="large">获取验证码</a-button>
+                <a-button size="large" @click="sendEmail" :disabled="disabled">
+                  {{ disabled ? `${countdown} 秒后重新获取` : "获取验证码" }}
+                </a-button>
               </div>
             </a-form-item>
             <div style="margin-bottom: 24px">
               <a-checkbox v-model:checked="checked">自动登录</a-checkbox>
-              <router-link style="float: right" to="">
+              <router-link style="float: right" to="/user/register">
                 还没账号?点击前往注册
               </router-link>
             </div>
             <a-form-item>
-              <a-button class="login-button" size="large" type="primary"
+              <a-button
+                class="login-button"
+                size="large"
+                type="primary"
+                @click="loginEmail"
+                html-type="submit"
                 >登录
               </a-button>
             </a-form-item>
@@ -115,6 +123,10 @@ import {
 } from "@ant-design/icons-vue";
 
 import { reactive, ref } from "vue";
+import { EmailService, UserService } from "../../../generated";
+import { message } from "ant-design-vue";
+import token from "@/utils/token";
+import router from "@/router";
 
 // 用来默认选择登录方式
 const activeKey = ref("1");
@@ -122,33 +134,89 @@ const activeKey = ref("1");
 // 默认是自动登录
 const checked = ref(true);
 
+// 是否禁用按钮
+const disabled = ref<boolean>(false);
+
+const countdown = ref(0);
+
+let timer: ReturnType<typeof setInterval> | null = null;
+
 // 账号登录需要用到的表单
 const formAccount = reactive({
-  account: "",
-  password: "",
+  account: "axliu",
+  password: "12345678",
 });
 
 // 邮箱登录用到的表单
 const formEmail = reactive({
-  email: "",
+  email: "276836658@qq.com",
   code: "",
 });
 
-const submit = () => {
-  console.log(1);
+const loginAccount = async () => {
+  if (formAccount.account === "" || formAccount.password === "") {
+    return;
+  }
+  const res = await UserService.postApiUserLoginAccount(formAccount);
+  if (res.code === 0) {
+    token.setToken(res.data.token);
+    message.success("登录成功");
+    await router.push({
+      path: "/",
+      replace: true,
+    });
+  } else {
+    message.error(res.msg);
+  }
+};
+
+const sendEmail = async () => {
+  if (formEmail.email === "") {
+    return;
+  }
+  const res = await EmailService.postApiEmailSend(formEmail);
+  if (res.code === 0) {
+    message.success("验证码发送成功");
+    disabled.value = true;
+    countdown.value = 60; // 设置初始倒计时为60秒
+    timer = setInterval(() => {
+      countdown.value -= 1;
+      if (countdown.value === 0) {
+        clearInterval(timer as any);
+        disabled.value = false;
+      }
+    }, 1000);
+  } else {
+    message.error(res.msg);
+  }
+};
+
+const loginEmail = async () => {
+  if (formEmail.email === "" || formEmail.code === "") {
+    return;
+  }
+  const res = await UserService.postApiUserLoginEmail(formEmail);
+  if (res.code === 0) {
+    token.setToken(res.data.token);
+    message.success("登录成功");
+    await router.push({
+      path: "/",
+      replace: true,
+    });
+  } else {
+    message.error(res.msg);
+  }
 };
 </script>
 
 <style lang="less" scoped>
 .user-layout-login {
-  /* 设置 label 标签的字体大小 */
-
+  // 设置 label 标签的字体大小
   label {
     font-size: 14px;
   }
 
-  /* 登录按钮样式 */
-
+  // 登录按钮样式
   button.login-button {
     padding: 0 15px;
     font-size: 16px;

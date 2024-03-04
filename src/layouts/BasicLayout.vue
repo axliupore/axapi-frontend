@@ -1,17 +1,9 @@
 <template>
-  <div>
+  <div id="basicLayout">
     <a-layout class="basicLayout">
-      <a-config-provider
-        :theme="{
-          token: {
-            colorPrimary: 'rgba(255, 255, 255)',
-          },
-        }"
-      >
-        <a-layout-header class="header">
-          <MenuBar class="menu-bar" />
-        </a-layout-header>
-      </a-config-provider>
+      <a-layout-header class="header">
+        <MenuBar class="menu-bar" />
+      </a-layout-header>
       <a-layout-content class="content">
         <router-view />
       </a-layout-content>
@@ -25,6 +17,15 @@
 
 <script setup lang="ts">
 import MenuBar from "@/components/menu/MenuBar.vue";
+import { onBeforeUnmount, onMounted } from "vue";
+
+onMounted(() => {
+  document.body.classList.add("basicLayout");
+});
+
+onBeforeUnmount(() => {
+  document.body.classList.remove("basicLayout");
+});
 </script>
 
 <style lang="less" scoped>

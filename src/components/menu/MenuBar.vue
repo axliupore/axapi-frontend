@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="menu-bar">
     <a-menu class="menu" mode="horizontal">
       <a-menu-item key="1">
         <a href="/">
@@ -22,7 +22,10 @@
         <OrderIcon />
         <span>我的订单</span>
       </a-menu-item>
-      <a-menu-item key="5" style="text-align: center">
+      <a-menu-item class="menu-guide">
+        <span>📘 开发者文档</span>
+      </a-menu-item>
+      <a-menu-item class="user-avatar" key="5">
         <a-dropdown>
           <div @click.prevent>
             <UserIcon />
@@ -32,7 +35,9 @@
             <a-menu>
               <a-menu-item>
                 <LoginIcon />
-                <span style="margin-left: 8px"> 登录账号 </span>
+                <router-link to="/user/login">
+                  <span style="margin-left: 8px"> 登录账号 </span>
+                </router-link>
               </a-menu-item>
             </a-menu>
           </template>
@@ -49,35 +54,44 @@ import { SmileOutlined } from "@ant-design/icons-vue";
 import UserIcon from "@/components/icon/UserIcon.vue";
 </script>
 <style lang="less">
-.menu {
-  width: 100%;
+.menu-bar {
+  .menu {
+    width: 100%;
 
-  .ant-menu-item {
-    a {
-      text-decoration: none; /* 去除链接的下划线 */
-      color: inherit; /* 继承父元素的文字颜色 */
+    .ant-menu-item {
+      a {
+        text-decoration: none; /* 去除链接的下划线 */
+        color: inherit; /* 继承父元素的文字颜色 */
+      }
+
+      &::after {
+        border-bottom: 0 !important;
+        box-sizing: border-box;
+      }
+
+      &:hover {
+        background-color: rgba(169, 169, 169, 0.2);
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+      }
     }
 
-    &::after {
-      border-bottom: 0 !important;
+    .ant-menu-item:first-child {
+      &:hover {
+        background-color: transparent; /* 第一个菜单项悬浮时的背景色设置为透明 */
+        box-shadow: none; /* 第一个菜单项悬浮时的阴影设置为透明 */
+      }
     }
 
-    &:hover {
-      background-color: rgba(169, 169, 169, 0.2);
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    .logo {
+      margin-left: 20px;
     }
-  }
 
-  .ant-menu-item:first-child {
-    &:hover {
-      background-color: transparent; /* 第一个菜单项悬浮时的背景色设置为透明 */
-      box-shadow: none; /* 第一个菜单项悬浮时的阴影设置为透明 */
+    .user-avatar {
+      margin-left: auto;
+      margin-right: 10px;
     }
-  }
-
-  .logo {
-    margin-left: 20px;
   }
 }
 </style>
