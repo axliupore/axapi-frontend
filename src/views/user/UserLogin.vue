@@ -128,26 +128,36 @@ import { message } from "ant-design-vue";
 import token from "@/utils/token";
 import router from "@/router";
 
-// 用来默认选择登录方式
+/**
+ * 用来默认选择登录方式
+ */
 const activeKey = ref("1");
 
-// 默认是自动登录
+/**
+ * 默认是自动登录
+ */
 const checked = ref(true);
 
-// 是否禁用按钮
+/**
+ * 是否禁用按钮
+ */
 const disabled = ref<boolean>(false);
 
 const countdown = ref(0);
 
 let timer: ReturnType<typeof setInterval> | null = null;
 
-// 账号登录需要用到的表单
+/**
+ * 账号登录需要用到的表单
+ */
 const formAccount = reactive({
   account: "axliu",
   password: "12345678",
 });
 
-// 邮箱登录用到的表单
+/**
+ * 邮箱登录用到的表单
+ */
 const formEmail = reactive({
   email: "276836658@qq.com",
   code: "",

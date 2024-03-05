@@ -48,7 +48,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { userStore } from "@/store/user";
 
 const cardList = ref([
   {
@@ -82,6 +83,11 @@ const cardList = ref([
       "平台致力于提供稳定和安全的接口调用服务，采用了安全措施和技术手段，保障用户数据的安全性和隐私保护。",
   },
 ]);
+
+onMounted(() => {
+  const user = userStore();
+  user.getLoginUser();
+});
 </script>
 
 <style lang="less">

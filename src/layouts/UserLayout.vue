@@ -5,7 +5,7 @@
         <div class="top">
           <router-link to="/" style="text-decoration: none">
             <div class="header">
-              <img src="~@/assets/logo.svg" alt="logo" />
+              <img src="../../public/logo.svg" alt="logo" />
               <span class="title"> Ax-API 接口开放平台 </span>
             </div>
           </router-link>
@@ -28,7 +28,7 @@
             <a-popover>
               <template #content>
                 <img
-                  src="~@/assets/wechat.png"
+                  src="../../public/wechat.png"
                   alt="weixin"
                   style="max-width: 120px; max-height: 120px"
                 />

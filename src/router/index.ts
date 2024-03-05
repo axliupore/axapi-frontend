@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import UserLogin from "@/views/user/UserLogin.vue";
 import UserRegister from "@/views/user/UserRegister.vue";
 import WelcomeView from "@/views/WelcomeView.vue";
+import { ACCESS_ENUM } from "@/access/access";
+import NotFound from "@/views/NotFound.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "主页",
     component: WelcomeView,
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: NotFound,
   },
 ];
 

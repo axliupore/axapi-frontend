@@ -169,20 +169,28 @@ import { EmailService, UserService } from "../../../generated";
 import { message } from "ant-design-vue";
 import router from "@/router";
 
-// 用来默认选择注册方式
+/**
+ * 用来默认选择注册方式
+ */
 const activeKey = ref("1");
 
-// 默认是自动注册
+/**
+ * 默认是自动注册
+ */
 const checked = ref(true);
 
-// 是否禁用按钮
+/**
+ * 是否禁用按钮
+ */
 const disabled = ref<boolean>(false);
 
 const countdown = ref(0);
 
 let timer: ReturnType<typeof setInterval> | null = null;
 
-// 账号注册需要用到的表单
+/**
+ * 账号注册需要用到的表单
+ */
 const formAccount = reactive({
   account: "",
   password: "",
@@ -190,7 +198,9 @@ const formAccount = reactive({
   username: "",
 });
 
-// 邮箱注册用到的表单
+/**
+ * 邮箱注册用到的表单
+ */
 const formEmail = reactive({
   email: "",
   code: "",

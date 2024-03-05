@@ -4,9 +4,10 @@
       <a-menu-item key="1">
         <a href="/">
           <div class="logo">
-            <img src="~@/assets/logo.svg" alt="Ax-API 接口开放平台" /><span
-              >Ax-API 接口开放平台</span
-            >
+            <img
+              src="../../../public/logo.svg"
+              alt="Ax-API 接口开放平台"
+            /><span>Ax-API 接口开放平台</span>
           </div>
         </a>
       </a-menu-item>
@@ -25,19 +26,59 @@
       <a-menu-item class="menu-guide">
         <span>📘 开发者文档</span>
       </a-menu-item>
-      <a-menu-item class="user-avatar" key="5">
+      <a-menu-item
+        v-if="user.role === ACCESS_ENUM.NOT_LOGIN || user.avatar === ''"
+        class="user-avatar"
+        key="5"
+      >
         <a-dropdown>
           <div @click.prevent>
             <UserIcon />
-            <span>游客</span>
+            <span>{{ user.username ? user.username : "游客" }}</span>
           </div>
           <template #overlay>
             <a-menu>
-              <a-menu-item>
+              <a-menu-item v-if="user.role === ACCESS_ENUM.NOT_LOGIN">
                 <LoginIcon />
                 <router-link to="/user/login">
                   <span style="margin-left: 8px"> 登录账号 </span>
                 </router-link>
+              </a-menu-item>
+              <a-menu-item v-if="user.role !== ACCESS_ENUM.NOT_LOGIN">
+                <LoginIcon />
+                <router-link to="/user/logout">
+                  <span style="margin-left: 8px"> 个人中心 </span>
+                </router-link>
+              </a-menu-item>
+              <a-menu-item v-if="user.role !== ACCESS_ENUM.NOT_LOGIN">
+                <LogoutOutlined style="color: #ff4d4f" />
+                <span style="margin-left: 8px; color: #ff4d4f" @click="logout">
+                  退出登录
+                </span>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </a-menu-item>
+      <a-menu-item v-else class="user-avatar" key="6">
+        <a-dropdown>
+          <div @click.prevent>
+            <a-avatar :src="user.avatar" style="margin-right: 10px" />
+            <span>{{ user.username }}</span>
+          </div>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item>
+                <UserOutlined />
+                <router-link to="/user/logout">
+                  <span style="margin-left: 8px"> 个人中心 </span>
+                </router-link>
+              </a-menu-item>
+              <a-menu-item>
+                <LogoutOutlined style="color: #ff4d4f" />
+                <span style="margin-left: 8px; color: #ff4d4f" @click="logout">
+                  退出登录
+                </span>
               </a-menu-item>
             </a-menu>
           </template>
@@ -50,8 +91,31 @@
 import OrderIcon from "@/components/icon/OrderIcon.vue";
 import SquareIcon from "@/components/icon/SquareIcon.vue";
 import LoginIcon from "@/components/icon/LoginIcon.vue";
-import { SmileOutlined } from "@ant-design/icons-vue";
+import {
+  SmileOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons-vue";
 import UserIcon from "@/components/icon/UserIcon.vue";
+import { userStore } from "@/store/user";
+import { ACCESS_ENUM } from "@/access/access";
+import token from "@/utils/token";
+import router from "@/router";
+import { message } from "ant-design-vue";
+
+const logout = () => {
+  message.success("退出登录成功");
+  token.clearToken();
+  router.push({
+    path: "/",
+    replace: true,
+  });
+  setTimeout(() => {
+    location.reload();
+  }, 500);
+};
+
+const user = userStore();
 </script>
 <style lang="less">
 .menu-bar {
