@@ -12,9 +12,11 @@
         </a>
       </a-menu-item>
       <a-menu-item key="2">
-        <SmileOutlined />
-        <span>欢迎</span></a-menu-item
-      >
+        <router-link to="/">
+          <SmileOutlined />
+          <span>欢迎</span>
+        </router-link>
+      </a-menu-item>
       <a-menu-item key="3">
         <SquareIcon />
         <span>接口广场</span>
@@ -39,14 +41,14 @@
           <template #overlay>
             <a-menu>
               <a-menu-item v-if="user.role === ACCESS_ENUM.NOT_LOGIN">
-                <LoginIcon />
                 <router-link to="/user/login">
+                  <LoginIcon />
                   <span style="margin-left: 8px"> 登录账号 </span>
                 </router-link>
               </a-menu-item>
               <a-menu-item v-if="user.role !== ACCESS_ENUM.NOT_LOGIN">
-                <LoginIcon />
-                <router-link to="/user/logout">
+                <router-link to="/user/index">
+                  <LoginIcon />
                   <span style="margin-left: 8px"> 个人中心 </span>
                 </router-link>
               </a-menu-item>
@@ -69,8 +71,8 @@
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <UserOutlined />
-                <router-link to="/user/logout">
+                <router-link to="/user/index">
+                  <UserOutlined />
                   <span style="margin-left: 8px"> 个人中心 </span>
                 </router-link>
               </a-menu-item>

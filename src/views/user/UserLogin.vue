@@ -192,7 +192,9 @@ const sendEmail = async () => {
     timer = setInterval(() => {
       countdown.value -= 1;
       if (countdown.value === 0) {
-        clearInterval(timer as any);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        clearInterval(timer);
         disabled.value = false;
       }
     }, 1000);

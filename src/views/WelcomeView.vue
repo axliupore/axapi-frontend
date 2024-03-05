@@ -90,7 +90,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .welcome-container {
   margin-top: 20px;
   width: 100%;
