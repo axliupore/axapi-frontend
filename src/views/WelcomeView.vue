@@ -116,11 +116,6 @@ onMounted(() => {
         flex: 1 1 0;
       }
 
-      .ant-card .ant-card-head {
-        border-bottom: 0;
-        padding: 16px;
-      }
-
       .card-div-title {
         display: flex;
         gap: 4px;

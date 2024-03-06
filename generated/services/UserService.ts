@@ -7,6 +7,7 @@ import type { request_UserLoginAccount } from '../models/request_UserLoginAccoun
 import type { request_UserLoginEmail } from '../models/request_UserLoginEmail';
 import type { request_UserRegisterAccount } from '../models/request_UserRegisterAccount';
 import type { request_UserRegisterEmail } from '../models/request_UserRegisterEmail';
+import type { request_UserUpdate } from '../models/request_UserUpdate';
 import type { response_Response } from '../models/response_Response';
 import type { response_UserLoginResponse } from '../models/response_UserLoginResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -94,6 +95,24 @@ export class UserService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/register/email',
+            body: data,
+        });
+    }
+    /**
+     * 更新用户信息
+     * @param data 用户名,头像地址,简介,性别
+     * @returns any 设置用户信息
+     * @throws ApiError
+     */
+    public static postApiUserUpdate(
+        data: request_UserUpdate,
+    ): CancelablePromise<(response_Response & {
+        data?: any;
+        msg?: string;
+    })> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/user/update',
             body: data,
         });
     }
