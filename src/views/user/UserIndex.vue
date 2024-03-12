@@ -3,7 +3,81 @@
     <a-card class="index-card">
       <a-card class="card-content" title="个人信息设置">
         <template #extra>
-          <a-button style="margin-right: 10px">更新邮箱</a-button>
+          <a-button style="margin-right: 10px" @click="handleEmailVisible"
+            >更新邮箱
+          </a-button>
+          <a-modal
+            :open="emailVisible"
+            @cancel="handleEmailCancel"
+            :footer="null"
+            centered
+          >
+            <div style="padding-inline: 32px; padding-block: 24px">
+              <a-form :model="formEmail" style="margin-bottom: -20px">
+                <a-form-item
+                  name="email"
+                  :rules="[
+                    { required: true, message: '请输入邮箱' },
+                    {
+                      pattern: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/,
+                      message: '不合法的邮箱账号！',
+                    },
+                  ]"
+                >
+                  <a-input
+                    size="large"
+                    placeholder="请输入邮箱"
+                    v-model:value="formEmail.email"
+                  >
+                    <template #prefix>
+                      <MailOutlined />
+                    </template>
+                  </a-input>
+                </a-form-item>
+                <a-form-item
+                  name="code"
+                  :rules="[{ required: true, message: '请输入验证码' }]"
+                >
+                  <div style="display: flex">
+                    <a-input
+                      size="large"
+                      placeholder="请输入验证码"
+                      style="margin-right: 8px"
+                      v-model:value="formEmail.code"
+                    >
+                      <template #prefix>
+                        <LockOutlined />
+                      </template>
+                    </a-input>
+                    <a-button
+                      size="large"
+                      @click="sendEmail"
+                      :disabled="disabled"
+                    >
+                      {{
+                        disabled ? `${countdown} 秒后重新获取` : "获取验证码"
+                      }}
+                    </a-button>
+                  </div>
+                </a-form-item>
+                <a-form-item>
+                  <div style="width: 100%">
+                    <a-button
+                      type="primary"
+                      html-type="submit"
+                      style="width: 100%"
+                      >更新邮箱
+                    </a-button>
+                  </div>
+                  <div style="margin-top: 15px; width: 100%">
+                    <a-button type="primary" danger ghost style="width: 100%"
+                      >解绑邮箱
+                    </a-button>
+                  </div>
+                </a-form-item>
+              </a-form>
+            </div>
+          </a-modal>
           <a-button @click="updateUserInfo">提交修改</a-button>
         </template>
         <div>
@@ -93,8 +167,17 @@ import {
   UploadFile,
   UploadProps,
 } from "ant-design-vue";
-import { PlusOutlined } from "@ant-design/icons-vue";
-import { OpenAPI, request_UserUpdate, UserService } from "../../../generated";
+import {
+  LockOutlined,
+  MailOutlined,
+  PlusOutlined,
+} from "@ant-design/icons-vue";
+import {
+  EmailService,
+  OpenAPI,
+  request_UserUpdate,
+  UserService,
+} from "../../../generated";
 
 const user = userStore();
 
@@ -265,6 +348,9 @@ const uploadConfig: UploadProps = {
   onChange: onChange,
 };
 
+/**
+ * 更新用户信息
+ */
 const updateUserInfo = async () => {
   if (gender.value === "女") {
     userInfo.gender = 1;
@@ -273,9 +359,59 @@ const updateUserInfo = async () => {
   const res = await UserService.postApiUserUpdate(userInfo);
   if (res.code === 0) {
     message.success("修改用户信息成功");
+    setTimeout(() => {
+      location.reload();
+    }, 500);
   } else {
     message.error(res.msg);
   }
+};
+
+/**
+ * 更新邮箱的表单
+ */
+const formEmail = reactive({
+  email: "276836658@qq.com",
+  code: "",
+});
+
+const disabled = ref<boolean>(false);
+
+const countdown = ref(0);
+
+let timer: ReturnType<typeof setInterval> | null = null;
+
+const emailVisible = ref(false);
+
+const sendEmail = async () => {
+  if (formEmail.email === "") {
+    return;
+  }
+  const res = await EmailService.postApiEmailSend(formEmail);
+  if (res.code === 0) {
+    message.success("验证码发送成功");
+    disabled.value = true;
+    countdown.value = 60; // 设置初始倒计时为60秒
+    timer = setInterval(() => {
+      countdown.value -= 1;
+      if (countdown.value === 0) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        clearInterval(timer);
+        disabled.value = false;
+      }
+    }, 1000);
+  } else {
+    message.error(res.msg);
+  }
+};
+
+const handleEmailVisible = () => {
+  emailVisible.value = true;
+};
+
+const handleEmailCancel = () => {
+  emailVisible.value = false;
 };
 </script>
 
